@@ -4,8 +4,7 @@ PY = $(VENV)/bin/python
 
 init: $(VENV)
 	$(PIP) install --upgrade pip
-	$(PIP) install ucimlrepo
-
+	$(PIP) install -r requirements.yaml
 
 $(VENV):
 	python3 -m venv $(VENV)
