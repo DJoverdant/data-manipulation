@@ -1,30 +1,34 @@
-import pandas as pd
 from ucimlrepo import fetch_ucirepo
+import matplotlib.pyplot as plt
+import pandas as pd
+import subprocess
 
 # Wine quality
 dataset = fetch_ucirepo(id=186)
-
-CATEGORIC = dataset.data.targets
 NUMERIC = dataset.data.features
 
-def get_categoric(target: any):
-    freq_abs = target.value_counts()
-    freq_rel = target.value_counts(normalize=True) * 100
 
-    return pd.DataFrame({
-        'Frequência Absoluta': freq_abs,
-        'Frequência Relativa (%)': freq_rel
-    })
+def plot_data(feature: pd.DataFrame):
+    ph_values = feature["pH"]
 
-def get_numeric(feature: any) -> str:
-    coluna = feature['sepallength']
-    classes = 5
+    binned = pd.cut(ph_values, bins=5)
+    freq = binned.value_counts().sort_index()
 
-    tabela_num = pd.cut(coluna, bins=classes).value_counts().sort_index()
+    freq.plot(
+        kind="bar",
+        color="teal",
+        rot=45,
+        title="Distribuição do pH do Vinho",
+        xlabel="Intervalos de pH",
+        ylabel="Frequência",
+    )
+
 
 def main():
-    get_categoric(CATEGORIC)
-    get_numeric(NUMERIC)
+    subprocess.run("clear")
+    plot_data(NUMERIC)
+    plt.show()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
